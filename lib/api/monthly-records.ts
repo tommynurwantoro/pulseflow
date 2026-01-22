@@ -2,6 +2,15 @@ import { prisma } from '../db'
 import { getCurrentMonthYear } from '../utils'
 
 export async function getOrCreateCurrentMonthlyRecord(userId: string) {
+  // Verify user exists before creating monthly record
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  })
+
+  if (!user) {
+    throw new Error(`User with id ${userId} does not exist. Please sign in again.`)
+  }
+
   const { year, month } = getCurrentMonthYear()
 
   let monthlyRecord = await prisma.monthlyRecord.findUnique({
@@ -51,6 +60,15 @@ export async function getOrCreateCurrentMonthlyRecord(userId: string) {
 }
 
 export async function getOrCreateMonthlyRecord(userId: string, year: number, month: number) {
+  // Verify user exists before creating monthly record
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  })
+
+  if (!user) {
+    throw new Error(`User with id ${userId} does not exist. Please sign in again.`)
+  }
+
   let monthlyRecord = await prisma.monthlyRecord.findUnique({
     where: {
       userId_year_month: {

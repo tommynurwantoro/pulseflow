@@ -17,7 +17,17 @@ export default async function DashboardPage() {
     redirect('/auth/signin')
   }
 
-  const monthlyRecord = await getOrCreateCurrentMonthlyRecord(session.user.id)
+  let monthlyRecord
+  try {
+    monthlyRecord = await getOrCreateCurrentMonthlyRecord(session.user.id)
+  } catch (error: any) {
+    // If user doesn't exist in database, redirect to sign in
+    if (error?.message?.includes('does not exist')) {
+      redirect('/auth/signin')
+    }
+    throw error
+  }
+
   const totals = calculateTotals(monthlyRecord?.transactions || [])
   const healthScore = calculateFinancialHealthScore(totals.totalIncome, totals.totalExpenses)
   const suggestions = getFinancialSuggestions({
@@ -94,16 +104,6 @@ export default async function DashboardPage() {
             <HeartbeatVisualization score={healthScore} size="lg" />
           </div>
 
-          {/* Financial Summary Cards */}
-          <FinancialSummary
-            totalIncome={totals.totalIncome}
-            totalExpenses={totals.totalExpenses}
-            balance={totals.totalIncome - totals.totalExpenses}
-          />
-
-          {/* Suggestions Card */}
-          <SuggestionsCard suggestions={suggestions} />
-
           {/* Quick Actions */}
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-slate-700 mb-6">
@@ -127,6 +127,16 @@ export default async function DashboardPage() {
               </Link>
             </div>
           </div>
+
+          {/* Financial Summary Cards */}
+          <FinancialSummary
+            totalIncome={totals.totalIncome}
+            totalExpenses={totals.totalExpenses}
+            balance={totals.totalIncome - totals.totalExpenses}
+          />
+
+          {/* Suggestions Card */}
+          <SuggestionsCard suggestions={suggestions} />
         </div>
       </main>
     </div>
