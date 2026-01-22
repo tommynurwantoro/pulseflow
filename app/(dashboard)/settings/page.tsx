@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { getCategoriesByUser } from '@/lib/api/categories'
 import { CategoryManager } from '@/components/settings/CategoryManager'
+import { CategoryType } from '@/lib/validations/category'
 
 export default async function SettingsPage() {
   const session = await auth()
@@ -12,6 +13,13 @@ export default async function SettingsPage() {
 
   const categories = await getCategoriesByUser(session.user.id)
 
+  // Map to ensure type compatibility with CategoryManager
+  const typedCategories: Array<{ id: string; name: string; type: CategoryType }> = categories.map(cat => ({
+    id: cat.id,
+    name: cat.name,
+    type: cat.type as CategoryType,
+  }))
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
       <div>
@@ -21,7 +29,7 @@ export default async function SettingsPage() {
         </p>
       </div>
 
-      <CategoryManager initialCategories={categories} />
+      <CategoryManager initialCategories={typedCategories} />
     </div>
   )
 }

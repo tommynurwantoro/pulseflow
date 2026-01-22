@@ -87,7 +87,7 @@ export default function SignInPage() {
     <div className="min-h-screen flex items-center justify-center gradient-bg px-4 py-12">
       <Suspense fallback={
         <div className="glass-card p-8 text-center">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto text-amber-500" />
+          <div className="loading loading-spinner loading-lg text-purple-500"></div>
         </div>
       }>
         <SignInForm />
