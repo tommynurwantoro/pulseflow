@@ -1,0 +1,5 @@
+# Shared components
+# - Navbar.tsx
+# - Sidebar.tsx
+# - LoadingSpinner.tsx
+# - ErrorBoundary.tsx

@@ -1,0 +1,7 @@
+# Monthly edit/detail page components
+# - InlineEditableField.tsx
+# - TransactionList.tsx
+# - ExpenseSection.tsx
+# - IncomeSection.tsx
+# - AssetList.tsx
+# - TotalsCard.tsx

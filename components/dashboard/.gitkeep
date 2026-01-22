@@ -1,0 +1,4 @@
+# Dashboard-specific components
+# - HeartbeatVisualization.tsx
+# - FinancialSummary.tsx
+# - SuggestionsCard.tsx
